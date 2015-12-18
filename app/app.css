@@ -505,3 +505,7 @@ footer .listContent ul[dnd-list] .dndPlaceholder {
   line-height: 1;
   text-shadow: 0 1px 0 #fff;
 }
+
+mark, .mark {
+    background-color: #f7e68f;
+}

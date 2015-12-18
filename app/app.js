@@ -52,8 +52,7 @@ angular
 
     $scope.$watch('models', function (models) {
       localStorageService.set('models', $scope.models);
-    }, true);
-
+    }, true);    
 
     $scope.addList = function (listval) {
         $scope.models[listval].content.push({text:'Story #1', imgfile:'', bgcolor:'apply-white', coltype:listval});     
@@ -93,4 +92,12 @@ angular
       $scope.models[3].content = [];
     };   
     
+    var isshow = localStorageService.get('status');
+    if (isshow == null) {
+
+        angular.element('#myModalShower').trigger('click');       
+        localStorageService.set('status', 1);
+
+    }    
+
 });
