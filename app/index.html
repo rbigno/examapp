@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Coding Test</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+<!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
+  <link rel="stylesheet" href="app.css">
+
+  <!-- Custom Fonts -->
+  <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="bower_components/animate.css/animate.css">  
+
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body ng-controller="ViewCtrl">
+<!--   <ul class="menu">
+    <li><a href="#/view1">view1</a></li>
+    <li><a href="#/view2">view2</a></li>
+  </ul> -->
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Coding Test</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-left">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>          
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+  <section id="maincontent" class="clearfix">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-3" ng-repeat="model in models" ng-if="$index < 3">
+
+          <div ng-style="{max-height: hgt+ 'px'}" class="panel panel-primary scroll-style pre-scrollable">
+            <div class="panel-body">
+              <h5 class="text-center clearall" ng-click="clearAllItem($index)">Clear All</h5>
+                <h4>
+                  <span class"pull-left">{{model.label}}</span> 
+                    <a href ng-click="addList($index)">
+                      <span class="glyphicon glyphicon-plus add-btn pull-right" aria-hidden="true"></span>
+                    </a>
+                </h4>
+
+                <div class="listContent row">                 
+<ul dnd-list="model.content">
+    <li ng-repeat="content in model.content"
+        dnd-draggable="content"
+        dnd-moved="model.content.splice($index, 1)"
+        dnd-effect-allowed="move" class="animated-element">
+
+                  <div class="panel panel-default {{content.bgcolor}} animated-element">
+                  <form name="contentForm" novalidate>       
+                    <div class="panel-body">
+               
+                      <div class="edit"><a href="#" data-toggle="modal" data-target="#myModal-{{$index}}-{{content.coltype}}"><i class="fa fa-pencil fa-lg"></i></a></div>
+                      <div class="delete"><a href ng-click="removeListItem($index,content.coltype)"><i class="fa fa-times fa-lg"></i></a></div>
+                        <p>
+                          <img ng-src="{{content.imgfile}}" class="img-responsive img-centered">
+                          {{content.text}}
+                        </p>
+                    </div> 
+
+
+                    <!-- Modal -->
+                    <div class="modal fade animated rubberBand" id="myModal-{{$index}}-{{content.coltype}}" role="dialog">
+                      <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title text-center">Modify Box</h4>
+                          </div>
+                          <div class="modal-body text-center">
+                         
+
+                                <div class="form-group" ng-class="{ 'has-error': contentForm.title.$touched && contentForm.title.$invalid }">
+                                  <label>Title</label>
+                                  <input type="text" name="title" class="form-control" ng-init="title=content.text"
+                                    ng-model="title"
+                                    required>
+                                    
+                                  <div class="help-block" ng-messages="contentForm.title.$error" ng-if="contentForm.title.$touched">
+                                    <p ng-message="required">Title is required.</p>
+                                  </div>
+                                </div>                            
+                            <p><i class="fa fa-circle-thin fa-2x center-block color-white" ng-click="updateListItem($index,'apply-white',content.coltype)"></i>
+                      <i class="fa fa-circle fa-2x center-block color-blue" ng-click="updateListItem($index,'apply-blue',content.coltype)"></i>
+                      <i class="fa fa-circle fa-2x center-block color-red" ng-click="updateListItem($index,'apply-red',content.coltype)"></i>
+                      <i class="fa fa-circle fa-2x center-block color-green" ng-click="updateListItem($index,'apply-green',content.coltype)"></i>
+                      <i class="fa fa-circle fa-2x center-block color-yellow" ng-click="updateListItem($index,'apply-yellow',content.coltype)"></i></p>
+                      <p class="clearfix">
+
+                            <a href="#" class="save-btn pull-left" ng-click="saveListItem($index,title,content.coltype)" ng-if="contentForm.title.$valid" data-dismiss="modal"><i class="fa fa-check fa-lg"></i></a> 
+                            <a href="#" class="save-btn pull-left" ng-click="saveListItem($index,title,content.coltype)" ng-if="contentForm.title.$invalid"><i class="fa fa-check fa-lg"></i></a>                             
+
+                            <a href="#" class="close" data-dismiss="modal"><i class="fa fa-times fa-lg"></i></a>
+                      </p>
+                    
+                          </div>
+                        </div>
+                      </div>
+                    </div>                      
+                  </form>
+                  </div>   
+
+       </li>
+      </ul>
+              </div>
+
+              </div>
+            </div> 
+        </div>  
+
+      </div>  
+    </div>
+   </section>
+
+    <footer class="clearfix" >
+      <div class="container-fluid">
+        <div class="panel panel-primary" ng-repeat="model in models" ng-if="model.label == 'Trash'">
+          <div class="panel-body">        
+              <div class="listContent row">
+
+             
+                   <h4>{{model.label}}</h4>
+                 <ul dnd-list="model.content">
+                  <li ng-repeat="content in model.content"
+                      dnd-draggable="content"
+                      dnd-moved="model.content.splice($index, 1)"
+                      dnd-effect-allowed="move" class="animated-element">
+                      <div class="panel panel-default box {{content.bgcolor}} animated-element">
+                        <div class="panel-body">
+                            <div class="trashdelete"><a href ng-click="deleteListItem($index)"><i class="fa fa-times fa-lg"></i></a></div>
+                              <p>
+                                <img ng-src="{{content.imgfile}}" class="img-responsive img-centered">
+                                {{content.text}}
+                                <input type="hidden" name="coltype" value="{{content.coltype}}">
+                              </p>
+                        </div>
+                    </div> 
+
+                  <li>
+                </ul>
+   
+
+              </div>
+              <div class="row">
+                <h5 class="text-center clearall" ng-click="clearAll()">Clear All</h5>
+              </div>
+          </div>
+      </div>
+    </footer>     
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+
+  <script src="bower_components/jquery/dist/jquery.js"></script>   
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>  
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>   
+  <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>  
+  <script src="app.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</body>
+</html>
